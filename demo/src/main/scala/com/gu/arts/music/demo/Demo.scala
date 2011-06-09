@@ -6,5 +6,5 @@ object Demo extends Application {
 
     implicit val lastfmApiKey = "bar"
     val artistProfile = ArtistProfile("foo")
-    
-}
+    println(artistProfile)
+}   
