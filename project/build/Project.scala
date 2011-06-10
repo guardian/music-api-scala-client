@@ -3,8 +3,8 @@ import java.io.File
 
 class Project(info: ProjectInfo) extends ParentProject(info) {
 
-  val robb1eGithub = "Robb1e Github Releases" at "http://robb1e.github.com/maven/repo-releases"
-  val robb1eLocal = "Robb1e local releases" at "file:///" + Path.userHome + "/robb1e.github.com/maven/repo-releases"
+  val robb1eGithub = "Guardian Github Releases" at "http://guardian.github.com/maven/repo-releases"
+  val robb1eLocal = "Guardian local releases" at "file:///" + Path.userHome + "/guardian.github.com/maven/repo-releases"
   
   lazy val lastfm = project("lastfm-api", "lastfm-api", new LastFm(_))
   lazy val demo = project("demo", "demo", lastfm)
@@ -18,11 +18,11 @@ class Project(info: ProjectInfo) extends ParentProject(info) {
   
   val publishTo =
     if (projectVersion.value.toString.contains("-SNAPSHOT"))
-      Resolver.file("robb1e github snapshots", new File(System.getProperty("user.home")
-            + "/robb1e.github.com/maven/repo-snapshots"))
+      Resolver.file("Guardian github snapshots", new File(System.getProperty("user.home")
+            + "/guardian.github.com/maven/repo-snapshots"))
     else
-      Resolver.file("robb1e github releases", new File(System.getProperty("user.home")
-            + "/robb1e.github.com/maven/repo-releases"))
+      Resolver.file("Guardian github releases", new File(System.getProperty("user.home")
+            + "/guardian.github.com/maven/repo-releases"))
 }
 
 trait PublishSources extends BasicScalaProject with BasicPackagePaths {
