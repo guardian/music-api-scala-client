@@ -6,8 +6,8 @@ This project is a Scala wrapper around several public music web APIs.
 
 ###SBT (0.7.x)
 
-	val guGithub = "Guardian Github Releases" at "http://guardian.github.com/maven/repo-releases"
-  	val musicApis = "com.gu.arts" %% "lastfm-api" % "1.0"
+	val guardianSnapshot = "Guardian GitHub Snapshot" at "http://guardian.github.com/maven/repo-snapshots"
+  	val musicApis = "com.gu.arts" %% "lastfm-api_2.8.1" % "0.1.1-SNAPSHOT"
 
 ##Example
 
