@@ -19,6 +19,7 @@ case class ArtistProfile(name: String, url: String, bio: ArtistBiography, tags: 
 case class ArtistProfileSimple(name: String, url: String, mbid: Option[String], image: List[ArtistImage]) {
   lazy val trimmedMbid = mbid map { _.trim } filter { !_.isEmpty }
   lazy val trimmedName = Trimmer.trimName(name)
+  lazy val trimmedNameWide = Trimmer.trmNameWide(name)
 }
 case class ArtistTags(tag: List[ArtistTag])
 case class ArtistTag(name: String, url: String)
@@ -59,6 +60,11 @@ object Trimmer {
       if (word.length > 12) word.substring(0, 12) + "... "
       else word + " ") mkString
   }
+
+  def trimNameWide(name: String) = {
+    name.split(" ").map(word =>
+      if (word.length > 16) word.substring(0, 16) + "... "
+      else word + " ") mkString
 }
 
 object ArtistProfileByName extends LastfmApi {
