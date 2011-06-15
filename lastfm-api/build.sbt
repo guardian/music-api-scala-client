@@ -4,7 +4,7 @@ name := "lastfm-api"
 
 organization := "com.gu.arts"
 
-version := "0.1.1-SNAPSHOT"
+version := "0.1.2-SNAPSHOT"
 
 libraryDependencies += "joda-time" % "joda-time" % "1.6.2"
 
