@@ -17,6 +17,13 @@ case class ArtistProfileSimple(name: String, url: String, mbid: Option[String], 
   lazy val trimmedMbid = mbid map { _.trim } filter { !_.isEmpty }
   lazy val trimmedName = Trimmer.trimName(name, 12)
   lazy val trimmedNameWide = Trimmer.trimName(name, 16)
+  lazy val encodedName = URLEncoder.encode(name, "UTF-8")
+
+  def similarArtists()(implicit lastfmApiKey: String): List[ArtistProfileSimple] = {
+    val similarArtistsOption: Option[SimilarArtists] = mbid flatMap { mbid => SimilarArtists(mbid) }
+    val similarArtistsList = similarArtistsOption getOrElse SimilarArtists(artist = List())
+    similarArtistsList.artists
+  }
 }
 case class ArtistTags(tag: List[ArtistTag])
 case class ArtistTag(name: String, url: String)
@@ -26,10 +33,13 @@ case class ArtistImage(text: String, size: String) { lazy val uri = text }
 case class ArtistAlbums(album: List[ArtistAlbum])
 case class ArtistAlbum(name: String, mbid: Option[String], url: String, image: List[ArtistImage]) {
   lazy val trimmedName = Trimmer.trimName(name, 12)
+  lazy val encodedName = URLEncoder.encode(name, "UTF-8")
 }
 case class ArtistTracks(track: List[ArtistTrack])
 case class ArtistTrack(name: String, url: String)
-case class SimilarArtists(artist: List[ArtistProfileSimple])
+case class SimilarArtists(artist: List[ArtistProfileSimple]){
+  lazy val artists = artist
+}
 
 abstract class ArtistApi extends LastfmApi {
   override val searchToken = "mbid"
