@@ -21,11 +21,20 @@ abstract class LastfmApi extends ApiConfiguration {
   implicit val formats = net.liftweb.json.DefaultFormats
   val log = LoggerFactory getLogger getClass
   val searchToken: String
+  val searchToken2: String = ""
   val method: String
   val host = "ws.audioscrobbler.com/2.0"
 
   def retrieve(token: String, apiKey: String) = {
     val query = Map("method" -> method, "api_key" -> apiKey, searchToken -> token, "format" -> "json")
+    val request = :/(host) <:< headers <<? query
+    log.info("Retrieving resource http://ws.audioscrobbler.com/2.0%s" format request.path)
+    val h = new Http
+    h(request as_str).replace("#text", "text").replace("@attr", "attr")
+  }
+
+  def retrieveWithMoreTokens(token1: String, token2: String, apiKey: String) = {
+    val query = Map("method" -> method, "api_key" -> apiKey, searchToken -> token1, searchToken2 -> token2, "format" -> "json")
     val request = :/(host) <:< headers <<? query
     log.info("Retrieving resource http://ws.audioscrobbler.com/2.0%s" format request.path)
     val h = new Http

@@ -16,6 +16,9 @@ Checkout the project, demo, to see how to call the companion objects for the cas
 #Publishing
 
 To publish to your local Maven/IVY repository, when in sbt (using ./sbt10) run the command
+    reload
+    clean
+    compile
 
     publish-local
 
