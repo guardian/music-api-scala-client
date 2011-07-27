@@ -2,7 +2,9 @@ package com.gu.arts.music.net.lastfm
 
 import dispatch._
 import org.slf4j.LoggerFactory
+import com.gu.arts.music.net.ConfiguredHttp
 
+case class LastfmApiKey(apiKey: String)
 case class LastFmApiError(error: Int, message: String)
 class LastFmApiException(msg: String, errorCode: Int) extends RuntimeException(msg)
 
@@ -25,20 +27,18 @@ abstract class LastfmApi extends ApiConfiguration {
   val method: String
   val host = "ws.audioscrobbler.com/2.0"
 
-  def retrieve(token: String, apiKey: String) = {
-    val query = Map("method" -> method, "api_key" -> apiKey, searchToken -> token, "format" -> "json")
+  def retrieve(token: String, apiKey: LastfmApiKey) = {
+    val query = Map("method" -> method, "api_key" -> apiKey.apiKey, searchToken -> token, "format" -> "json")
     val request = :/(host) <:< headers <<? query
     log.info("Retrieving resource http://ws.audioscrobbler.com/2.0%s" format request.path)
-    val h = new Http
-    h(request as_str).replace("#text", "text").replace("@attr", "attr")
+    ConfiguredHttp(request as_str).replace("#text", "text").replace("@attr", "attr")
   }
 
-  def retrieveWithMoreTokens(token1: String, token2: String, apiKey: String) = {
-    val query = Map("method" -> method, "api_key" -> apiKey, searchToken -> token1, searchToken2 -> token2, "format" -> "json")
+  def retrieveWithMoreTokens(token1: String, token2: String, apiKey: LastfmApiKey) = {
+    val query = Map("method" -> method, "api_key" -> apiKey.apiKey, searchToken -> token1, searchToken2 -> token2, "format" -> "json")
     val request = :/(host) <:< headers <<? query
     log.info("Retrieving resource http://ws.audioscrobbler.com/2.0%s" format request.path)
-    val h = new Http
-    h(request as_str).replace("#text", "text").replace("@attr", "attr")
+    ConfiguredHttp(request as_str).replace("#text", "text").replace("@attr", "attr")
   }
 }
 

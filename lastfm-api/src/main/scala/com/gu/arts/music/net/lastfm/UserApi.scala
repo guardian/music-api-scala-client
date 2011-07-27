@@ -10,5 +10,5 @@ abstract class UserApi extends LastfmApi {
 
 object UserTopArtists extends UserApi {
   override val method = "user.gettopartists"
-  def apply(username: String)(implicit lastfmApiKey: String) = (parse(retrieve(username, lastfmApiKey)) \ "topartists").extractOpt[UserTopArtists]
+  def apply(username: String)(implicit lastfmApiKey: LastfmApiKey) = (parse(retrieve(username, lastfmApiKey)) \ "topartists").extractOpt[UserTopArtists]
 }

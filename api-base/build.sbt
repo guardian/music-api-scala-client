@@ -1,6 +1,6 @@
 import java.util.jar._
 
-name := "lastfm-api"
+name := "music-api-base"
 
 organization := "com.gu.arts"
 

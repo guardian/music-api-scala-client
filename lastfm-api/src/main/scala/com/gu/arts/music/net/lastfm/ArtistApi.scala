@@ -20,7 +20,7 @@ case class ArtistProfileSimple(name: String, url: String, mbid: Option[String], 
   lazy val trimmedNameWide = Trimmer.trimName(name, 16)
   lazy val encodedName = URLEncoder.encode(name, "UTF-8")
 
-  def similarArtists()(implicit lastfmApiKey: String): List[ArtistProfileSimple] = {
+  def similarArtists()(implicit lastfmApiKey: LastfmApiKey): List[ArtistProfileSimple] = {
     val similarArtistsOption: Option[SimilarArtists] = mbid flatMap { mbid => SimilarArtists(mbid) }
     val similarArtistsList = similarArtistsOption getOrElse SimilarArtists(artist = List())
     similarArtistsList.artists
@@ -63,7 +63,7 @@ abstract class ArtistApi extends LastfmApi {
 object ArtistProfileByName extends ArtistApi {
   override val method = "artist.getinfo"
   override val searchToken = "artist"
-  def apply(name: String)(implicit lastfmApiKey: String) = (parse(retrieve(URLEncoder.encode(name, "utf-8"), lastfmApiKey)) \ "artist").extractOpt[ArtistProfile]
+  def apply(name: String)(implicit lastfmApiKey: LastfmApiKey) = (parse(retrieve(URLEncoder.encode(name, "utf-8"), lastfmApiKey)) \ "artist").extractOpt[ArtistProfile]
 }
 
 
@@ -72,34 +72,34 @@ object LastFmAlbum extends ArtistApi {
   override val searchToken = "artist"
   override val searchToken2 = "album"
 
-  def apply(name: String, albumName: String)(implicit lastfmApiKey: String) = Some((parse(retrieveWithMoreTokens(name, albumName, lastfmApiKey))).extract[TopLevelAlbum].album)
+  def apply(name: String, albumName: String)(implicit lastfmApiKey: LastfmApiKey) = Some((parse(retrieveWithMoreTokens(name, albumName, lastfmApiKey))).extract[TopLevelAlbum].album)
 }
 
 object ArtistProfile extends ArtistApi {
   override val method = "artist.getinfo"
-  def apply(mbid: String)(implicit lastfmApiKey: String) = (parse(retrieve(mbid, lastfmApiKey)) \ "artist").extractOpt[ArtistProfile]
+  def apply(mbid: String)(implicit lastfmApiKey: LastfmApiKey) = (parse(retrieve(mbid, lastfmApiKey)) \ "artist").extractOpt[ArtistProfile]
 }
 
 object ArtistTracks extends ArtistApi {
   override val method = "artist.getTopTracks"
-  def apply(mbid: String)(implicit lastfmApiKey: String) = (parse(retrieve(mbid, lastfmApiKey)) \ "toptracks").extractOpt[ArtistTracks]
+  def apply(mbid: String)(implicit lastfmApiKey: LastfmApiKey) = (parse(retrieve(mbid, lastfmApiKey)) \ "toptracks").extractOpt[ArtistTracks]
 }
 
 object SimilarArtists extends ArtistApi {
   override val method = "artist.getSimilar"
-  def apply(mbid: String)(implicit lastfmApiKey: String) = (parse(retrieve(mbid, lastfmApiKey)) \ "similarartists").extractOpt[SimilarArtists]
+  def apply(mbid: String)(implicit lastfmApiKey: LastfmApiKey) = (parse(retrieve(mbid, lastfmApiKey)) \ "similarartists").extractOpt[SimilarArtists]
 }
 
 object ArtistLastFmApiError extends ArtistApi {
   override val method = "artist.getinfo"
-  def apply(mbid: String)(implicit lastfmApiKey: String) = (parse(retrieve(mbid, lastfmApiKey))).extractOpt[LastFmApiError]
+  def apply(mbid: String)(implicit lastfmApiKey: LastfmApiKey) = (parse(retrieve(mbid, lastfmApiKey))).extractOpt[LastFmApiError]
 }
 
 object ArtistAlbums extends ArtistApi {
 
   override val method = "artist.getTopAlbums"
 
-  def apply(mbid: String)(implicit lastfmApiKey: String): Option[ArtistAlbums] = {
+  def apply(mbid: String)(implicit lastfmApiKey: LastfmApiKey): Option[ArtistAlbums] = {
     val result = retrieve(mbid, lastfmApiKey)
     val json = (parse(result) \ "topalbums").extractOpt[ArtistAlbums]
     json match {
