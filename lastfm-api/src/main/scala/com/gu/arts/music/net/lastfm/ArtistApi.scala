@@ -72,7 +72,8 @@ object LastFmAlbum extends ArtistApi {
   override val searchToken = "artist"
   override val searchToken2 = "album"
 
-  def apply(name: String, albumName: String)(implicit lastfmApiKey: LastfmApiKey) = Some((parse(retrieveWithMoreTokens(name, albumName, lastfmApiKey))).extract[TopLevelAlbum].album)
+  def apply(name: String, albumName: String)(implicit lastfmApiKey: LastfmApiKey) =
+    parse(retrieveWithMoreTokens(name, albumName, lastfmApiKey)).extractOpt[TopLevelAlbum] map (a => a.album)
 }
 
 object ArtistProfile extends ArtistApi {
