@@ -6,6 +6,6 @@ object MusicBuild extends Build {
   lazy val apiBase = Project("music-api-base", file("api-base"))
   lazy val lastfm = Project("lastfm-api", file("lastfm-api")) dependsOn(apiBase)
   lazy val musicMetric = Project("musicmetric-api", file("musicmetric")) dependsOn(apiBase)
-  lazy val demo = Project("demo", file("demo")) dependsOn (lastfm)
+  lazy val demo = Project("demo", file("demo")) dependsOn (lastfm, musicMetric)
 
 }
