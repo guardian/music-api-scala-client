@@ -3,7 +3,7 @@ name := "music"
 
 organization := "com.gu.arts"
 
-version in ThisBuild := "0.1.8"
+version in ThisBuild := "0.1.11"
 
 publishTo <<= (version) { version: String =>
     val publishType = if (version.endsWith("SNAPSHOT")) "snapshots" else "releases"

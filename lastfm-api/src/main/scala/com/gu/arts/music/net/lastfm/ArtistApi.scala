@@ -5,8 +5,10 @@ import java.net.URLEncoder
 import net.liftweb.json.JsonAST.JValue
 
 case class Tracks(track: List[Track])
-
-case class Track(title: String)
+case class RankAttr(rank: String)
+case class Track(name: String, attr: RankAttr) {
+  lazy val rank = attr.rank
+}
 
 case class ArtistProfile(name: String, url: String, bio: ArtistBiography, tags: ArtistTags, stats: ArtistStats, image: List[ArtistImage]) {
   def getImage(imageSize: String, default: String) = {
@@ -85,19 +87,9 @@ object LastFmAlbumTracks extends ArtistApi {
   override val searchToken = "artist"
   override val searchToken2 = "album"
 
-  def apply(mbid: String)(implicit lastfmApiKey: LastfmApiKey): Option[Tracks] = {
-    val result = retrieve(mbid, lastfmApiKey)
-    val json = (parse(result) \ "tracks").extractOpt[Tracks]
-    json match {
-      case Some(j) => json
-      case None => {
-        val track = (parse(result) \ "tracks" \ "track").extractOpt[Track]
-        track match {
-          case None => None
-          case Some(track) => Some(Tracks(List(track)))
-        }
-      }
-    }
+  def apply(artistName: String, albumName: String)(implicit lastfmApiKey: LastfmApiKey): Option[Tracks] = {
+    val albumJson = retrieveWithMoreTokens(artistName, albumName, lastfmApiKey).replaceAll("@attr","attr")
+    (parse(albumJson) \ "album" \ "tracks").extractOpt[Tracks]
   }
 }
 
